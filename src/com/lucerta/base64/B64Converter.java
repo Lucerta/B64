@@ -87,8 +87,7 @@ public class B64Converter
     {
         if (padLength == 0) return array;
         int newLength = array.length + padLength;
-        byte[] result = new byte[newLength];
-        System.arraycopy(array, 0, result, 0, array.length);
+        byte[] result = Arrays.copyOf(array, newLength);
         for (int i = array.length; i < newLength; i++) result[i] = padChar;
         return result;
     }
