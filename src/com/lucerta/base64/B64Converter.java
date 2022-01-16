@@ -1,6 +1,7 @@
 package com.lucerta.base64;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 public class B64Converter
 {
@@ -11,8 +12,7 @@ public class B64Converter
         for (int i = 0; i < data.length; i += 3)
         {
             int length = Math.min(3, data.length - i);
-            byte[] array = new byte[length];
-            System.arraycopy(data, i, array, 0, length);
+            byte[] array = Arrays.copyOfRange(data, i, i + length);
             array = convert3to4(array, urlSafe);
             buffer.write(array, 0, array.length);
         }
@@ -29,8 +29,7 @@ public class B64Converter
         for (int i = 0; i < dataLength; i += 4)
         {
             int length = Math.min(4, dataLength - i);
-            byte[] array = new byte[length];
-            System.arraycopy(data, i, array, 0, length);
+            byte[] array = Arrays.copyOfRange(data, i, i + length);
             array = convert4to3(array);
             buffer.write(array, 0, array.length);
         }
