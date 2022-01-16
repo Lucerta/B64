@@ -75,7 +75,7 @@ public class B64Converter
             iVal += (index & 63) << ((3 - i) * 6);
         }
 
-        array = new byte[array.length * 3 / 4];
+        array = new byte[array.length - 1];
 
         for (int i = 0; i < array.length; i++)
         {
