@@ -1,3 +1,12 @@
 # B64
-Base64 Encoder / Decoder
-B64 is a base 64 encoder and decoder. It can encode/decode to and from byte arrays or strings. It has support for URL safe encoding and decoding. B64 is a java library, and includes a JAR file.
+
+
+B64 is a java based Base 64 Encoder and Decoder. B64 can encode and decode to and from byte arrays and strings. B64 has support for URL safe encoding and decoding.
+Features
+
+    Base 64 Encoder / Decoder
+    * Encode to and from byte arrays and strings
+    * Decode to and from byte arrays and strings
+    * Support for URL safe encoding and decoding
+    * JAR file
+
