@@ -39,7 +39,7 @@ public class B64Converter
 
     private static byte[] convert3to4(byte[] array, boolean urlSafe)
     {
-        boolean padding = !urlSafe;
+        boolean padding = !urlSafe && array.length < 3;
         char[] table = urlSafe ? B64_CHARS_URLSAFE : B64_CHARS_DEFAULT;
 
         int iVal = 0;
