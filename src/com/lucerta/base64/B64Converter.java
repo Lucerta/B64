@@ -69,7 +69,9 @@ public class B64Converter
         for (int i = 0; i < array.length; i++)
         {
             int index = table[(char)array[i]];
-            if (index == -1) throw new IllegalArgumentException("Invalid char val=" + (int)(char)array[i]);
+            if (index == -1)
+                throw new IllegalArgumentException(
+                "Invalid char val=" + (int)(char)array[i]);
             iVal += (index & 63) << ((3 - i) * 6);
         }
 
