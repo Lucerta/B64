@@ -70,8 +70,8 @@ public class B64Converter
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
         {
-            int b = array[i] & 0xFF;
-            iVal += (b & 63) << ((3 - i) * 6);
+            int b = array[i] & 63;
+            iVal += b << ((3 - i) * 6);
         }
 
         array = new byte[array.length - 1];
