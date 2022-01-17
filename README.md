@@ -8,5 +8,6 @@ B64 is a fast and light-weight java based Base 64 Encoder and Decoder. B64 can e
     * Encode to and from byte arrays and strings
     * Decode to and from byte arrays and strings
     * Support for URL safe encoding and decoding
+    * Aux chars allowed in encoded text: space, tab, cr & lf
     * JAR file
 
