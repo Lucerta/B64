@@ -26,12 +26,15 @@ public class B64Converter
 
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-        for (int i = 0; i < dataLength; i += 4)
+        int[] i = new int[1];
+        for (; i[0] < dataLength; i[0]++)
         {
-            int length = Math.min(4, dataLength - i);
-            byte[] array = Arrays.copyOfRange(data, i, i + length);
-            array = convert4to3(array);
-            buffer.write(array, 0, array.length);
+            byte[] array = getBytesForDecoding(data, i, dataLength);
+            if (array.length > 0)
+            {
+                array = convert4to3(array);
+                buffer.write(array, 0, array.length);
+            }
         }
 
         return buffer.toByteArray();
@@ -64,16 +67,11 @@ public class B64Converter
 
     private static byte[] convert4to3(byte[] array)
     {
-        int[] table = REVERSE_LOOKUP;
-
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
         {
-            int index = table[(char)array[i]];
-            if (index == -1)
-                throw new IllegalArgumentException(
-                "Invalid char val=" + (int)(char)array[i]);
-            iVal += (index & 63) << ((3 - i) * 6);
+            int b = array[i] & 0xFF;
+            iVal += (b & 63) << ((3 - i) * 6);
         }
 
         array = new byte[array.length - 1];
@@ -84,6 +82,23 @@ public class B64Converter
         }
 
         return array;
+    }
+
+    private static byte[] getBytesForDecoding(byte[] data, int[] i, int dataLength)
+    {
+        byte[] bytes = new byte[4];
+        int count = 0;
+        for (; i[0] < dataLength; i[0]++)
+        {
+            char c = (char)data[i[0]];
+            int b = REVERSE_LOOKUP[c];
+            if (b == -1) throw new IllegalArgumentException("Invalid char val=" + (int)c);
+            if (b == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
+            bytes[count++] = (byte)b;
+            if (count == 4) break;
+        }
+        if (count < 4) bytes = Arrays.copyOf(bytes, count);
+        return bytes;
     }
 
     private static byte[] padRight(byte[] array, int padLength, byte padChar)
@@ -113,9 +128,9 @@ public class B64Converter
         'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
         'w','x','y','z','0','1','2','3','4','5','6','7','8','9','-','_' };
     private final static int[] REVERSE_LOOKUP = {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -2, -2, -1, -1, -2, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, 62, -1, 63,
+        -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, 62, -1, 63,
         52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
         -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
         15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, 63,
