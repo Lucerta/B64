@@ -53,7 +53,7 @@ public class B64Converter
         for (int i = 0; i < array.length; i++)
         {
             int index = (iVal >> ((3 - i) * 6)) & 63;
-            array[i] = (byte)(table[index]);
+            array[i] = (byte)table[index];
         }
 
         boolean padding = !urlSafe && array.length < 4;
