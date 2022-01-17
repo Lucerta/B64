@@ -86,19 +86,17 @@ public class B64Converter
 
     private static byte[] getBytesForDecoding(byte[] data, int[] i, int dataLength)
     {
-        byte[] bytes = new byte[4];
-        int count = 0;
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         for (; i[0] < dataLength; i[0]++)
         {
             char c = (char)data[i[0]];
             int b = REVERSE_LOOKUP[c];
             if (b == -1) throw new IllegalArgumentException("Invalid char val=" + (int)c);
             if (b == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
-            bytes[count++] = (byte)b;
-            if (count == 4) break;
+            buffer.write(b);
+            if (buffer.size() == 4) break;
         }
-        if (count < 4) bytes = Arrays.copyOf(bytes, count);
-        return bytes;
+        return buffer.toByteArray();
     }
 
     private static byte[] padRight(byte[] array, int padLength, byte padChar)
