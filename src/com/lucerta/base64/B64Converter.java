@@ -27,7 +27,7 @@ public class B64Converter
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int[] i = new int[1];
-        for (; i[0] < dataLength; i[0]++)
+        for (i[0] = 0; i[0] < dataLength; i[0]++)
         {
             byte[] array = getBytesForDecoding(data, i, dataLength);
             if (array.length > 0)
