@@ -106,7 +106,7 @@ public class B64Converter
             if (ending || b == -1)
                 throw new IllegalArgumentException(
                 "Invalid char val=" + (int)c);
-            buffer.write(b);
+            buffer.write((byte)b);
         }
         return buffer.toByteArray();
     }
