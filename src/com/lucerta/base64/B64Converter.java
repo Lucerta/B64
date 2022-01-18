@@ -75,18 +75,18 @@ public class B64Converter
         return array;
     }
     
-    private static byte[] convertEncodedDataToText(byte[] array, boolean urlSafe)
+    private static byte[] convertEncodedDataToText(byte[] data, boolean urlSafe)
     {
         char[] table = urlSafe ? B64_CHARS_URLSAFE : B64_CHARS_DEFAULT;
-        int length = array.length;
-        for (int i = 0; i < length; i++) array[i] = (byte)table[array[i]];
+        int length = data.length;
+        for (int i = 0; i < length; i++) data[i] = (byte)table[data[i]];
         boolean padding = !urlSafe && length % 4 > 0;
         if (padding)
         {
-            array = Arrays.copyOf(array, length + length % 4);
-            for (int i = length; i < array.length; i++) array[i] = '=';
+            data = Arrays.copyOf(data, length + length % 4);
+            for (int i = length; i < data.length; i++) data[i] = '=';
         }
-        return array;
+        return data;
     }
     
     private static byte[] convertEncodedTextToData(byte[] data)
