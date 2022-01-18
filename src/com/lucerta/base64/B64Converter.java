@@ -13,7 +13,7 @@ public class B64Converter
         {
             int length = Math.min(3, data.length - i);
             byte[] array = Arrays.copyOfRange(data, i, i + length);
-            array = convert3to4(array);
+            array = convert256to64(array);
             buffer.write(array, 0, array.length);
         }
 
@@ -30,14 +30,14 @@ public class B64Converter
         {
             int length = Math.min(4, data.length - i);
             byte[] array = Arrays.copyOfRange(data, i, i + length);
-            array = convert4to3(array);
+            array = convert64to256(array);
             buffer.write(array, 0, array.length);
         }
 
         return buffer.toByteArray();
     }
 
-    private static byte[] convert3to4(byte[] array)
+    private static byte[] convert256to64(byte[] array)
     {
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
@@ -57,7 +57,7 @@ public class B64Converter
         return array;
     }
 
-    private static byte[] convert4to3(byte[] array)
+    private static byte[] convert64to256(byte[] array)
     {
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
