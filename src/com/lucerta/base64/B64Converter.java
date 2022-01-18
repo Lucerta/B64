@@ -87,7 +87,7 @@ public class B64Converter
         boolean ending = false;
         for (int i = 0; i < data.length; i++)
         {
-            char c = (char)data[i[0]];
+            char c = (char)data[i];
             if (c == '=')
             {
                 ending = true;
