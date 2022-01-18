@@ -22,19 +22,16 @@ public class B64Converter
 
     public static byte[] decode(byte[] data)
     {
-        int dataLength = getLengthWithoutPadding(data);
+        data = filterEncodedData(data);
+        
+        int ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int[] i = new int[1];
-        for (i[0] = 0; i[0] < dataLength; i[0]++)
+        for (int i = 0; i < data.length; i += 4)
         {
-            byte[] array = getBytesForDecoding(data, i, dataLength);
-            if (array.length > 0)
-            {
-                array = convert4to3(array);
-                buffer.write(array, 0, array.length);
-            }
+            int length = Math.min(4, data.length - i);
+            byte[] array = Arrays.copyOfRange(data, i, i + length);
+            array = convert4to3(array);
+            buffer.write(array, 0, array.length);
         }
 
         return buffer.toByteArray();
@@ -83,18 +80,23 @@ public class B64Converter
 
         return array;
     }
-
-    private static byte[] getBytesForDecoding(byte[] data, int[] i, int dataLength)
+    
+    private byte[] filterEncodedData(byte[] data)
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        for (; i[0] < dataLength; i[0]++)
+        boolean ending = false;
+        for (int i = 0; i < data.length; i++)
         {
             char c = (char)data[i[0]];
-            int b = REVERSE_LOOKUP[c];
+            if (c == '=')
+            {
+                ending = true;
+                continue;
+            }
+            int b = ending ? -1 : REVERSE_LOOKUP[c];
             if (b == -1) throw new IllegalArgumentException("Invalid char val=" + (int)c);
             if (b == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
             buffer.write(b);
-            if (buffer.size() == 4) break;
         }
         return buffer.toByteArray();
     }
@@ -106,13 +108,6 @@ public class B64Converter
         byte[] result = Arrays.copyOf(array, newLength);
         for (int i = array.length; i < newLength; i++) result[i] = padChar;
         return result;
-    }
-
-    private static int getLengthWithoutPadding(byte[] data)
-    {
-        int pad = 0;
-        while (data.length > 0 && data[data.length - pad - 1] == '=') pad++;
-        return data.length - pad;
     }
 
     private final static char[] B64_CHARS_DEFAULT = {
