@@ -110,7 +110,7 @@ public class B64Converter
             if (b == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
             if (ending || b == -1)
                 throw new IllegalArgumentException(
-					"Invalid char val=" + (int)c);
+                "Invalid char val=" + (int)c);
             buffer.write((byte)b);
         }
         return buffer.toByteArray();
