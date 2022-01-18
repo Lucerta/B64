@@ -96,7 +96,6 @@ public class B64Converter
             int b = REVERSE_LOOKUP[c];
             if (b == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
             if (ending || b == -1) throw new IllegalArgumentException("Invalid char val=" + (int)c);
-            
             buffer.write(b);
         }
         return buffer.toByteArray();
