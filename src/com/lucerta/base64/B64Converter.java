@@ -76,21 +76,24 @@ public class B64Converter
 
         return array;
     }
-    
+
     private static byte[] convertEncodedDataToText(byte[] data, boolean urlSafe)
     {
         char[] table = urlSafe ? B64_CHARS_URLSAFE : B64_CHARS_DEFAULT;
         int length = data.length;
         for (int i = 0; i < length; i++) data[i] = (byte)table[data[i]];
-        boolean padding = !urlSafe && length % 4 > 0;
-        if (padding)
+        if (!urlSafe)
         {
-            data = Arrays.copyOf(data, length + length % 4);
-            for (int i = length; i < data.length; i++) data[i] = '=';
+            int extra = length % 4;
+            if (extra > 0)
+            {
+                data = Arrays.copyOf(data, length + (4 - extra));
+                for (int i = length; i < data.length; i++) data[i] = '=';
+            }
         }
         return data;
     }
-    
+
     private static byte[] convertEncodedTextToData(byte[] data)
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -107,7 +110,7 @@ public class B64Converter
             if (b == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
             if (ending || b == -1)
                 throw new IllegalArgumentException(
-                "Invalid char val=" + (int)c);
+					"Invalid char val=" + (int)c);
             buffer.write((byte)b);
         }
         return buffer.toByteArray();
