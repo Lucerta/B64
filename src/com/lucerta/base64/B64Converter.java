@@ -23,7 +23,6 @@ public class B64Converter
     public static byte[] decode(byte[] data)
     {
         data = filterEncodedData(data);
-        
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         for (int i = 0; i < data.length; i += 4)
