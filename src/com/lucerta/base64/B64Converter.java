@@ -13,16 +13,17 @@ public class B64Converter
         {
             int length = Math.min(3, data.length - i);
             byte[] array = Arrays.copyOfRange(data, i, i + length);
-            array = convert3to4(array, urlSafe);
+            array = convert3to4(array);
             buffer.write(array, 0, array.length);
         }
 
-        return buffer.toByteArray();
+        data = buffer.toByteArray();
+        return convertEncodedDataToText(data, urlSafe);
     }
 
     public static byte[] decode(byte[] data)
     {
-        data = filterEncodedData(data);
+        data = convertEncodedTextToData(data);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         for (int i = 0; i < data.length; i += 4)
@@ -36,14 +37,12 @@ public class B64Converter
         return buffer.toByteArray();
     }
 
-    private static byte[] convert3to4(byte[] array, boolean urlSafe)
+    private static byte[] convert3to4(byte[] array)
     {
-        char[] table = urlSafe ? B64_CHARS_URLSAFE : B64_CHARS_DEFAULT;
-
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
         {
-            int b = array[i] & 0xFF;
+            int b = array[i] & 255;
             iVal += b << ((2 - i) * 8);
         }
 
@@ -51,12 +50,8 @@ public class B64Converter
 
         for (int i = 0; i < array.length; i++)
         {
-            int index = (iVal >> ((3 - i) * 6)) & 63;
-            array[i] = (byte)table[index];
+            array[i] = (byte)((iVal >> ((3 - i) * 6)) & 63);
         }
-
-        boolean padding = !urlSafe && array.length < 4;
-        if (padding) array = padRight(array, 4 - array.length, (byte)'=');
 
         return array;
     }
@@ -74,13 +69,27 @@ public class B64Converter
 
         for (int i = 0; i < array.length; i++)
         {
-            array[i] = (byte)((iVal >> ((2 - i) * 8)) & 0xFF);
+            array[i] = (byte)((iVal >> ((2 - i) * 8)) & 255);
         }
 
         return array;
     }
     
-    private static byte[] filterEncodedData(byte[] data)
+    private static byte[] convertEncodedDataToText(byte[] array, boolean urlSafe)
+    {
+        char[] table = urlSafe ? B64_CHARS_URLSAFE : B64_CHARS_DEFAULT;
+        int length = array.length;
+        for (int i = 0; i < length; i++) array[i] = (byte)table[array[i]];
+        boolean padding = !urlSafe && length % 4 > 0;
+        if (padding)
+        {
+            array = Arrays.copyOf(array, length + length % 4);
+            for (int i = length; i < array.length; i++) array[i] = '=';
+        }
+        return array;
+    }
+    
+    private static byte[] convertEncodedTextToData(byte[] data)
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         boolean ending = false;
@@ -100,15 +109,6 @@ public class B64Converter
             buffer.write(b);
         }
         return buffer.toByteArray();
-    }
-
-    private static byte[] padRight(byte[] array, int padLength, byte padChar)
-    {
-        if (padLength == 0) return array;
-        int newLength = array.length + padLength;
-        byte[] result = Arrays.copyOf(array, newLength);
-        for (int i = array.length; i < newLength; i++) result[i] = padChar;
-        return result;
     }
 
     private final static char[] B64_CHARS_DEFAULT = {
