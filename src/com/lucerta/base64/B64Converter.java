@@ -24,7 +24,7 @@ public class B64Converter
     {
         data = filterEncodedData(data);
         
-        int ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         for (int i = 0; i < data.length; i += 4)
         {
@@ -81,7 +81,7 @@ public class B64Converter
         return array;
     }
     
-    private byte[] filterEncodedData(byte[] data)
+    private static byte[] filterEncodedData(byte[] data)
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         boolean ending = false;
