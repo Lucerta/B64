@@ -43,7 +43,7 @@ public class B64Converter
         for (int i = 0; i < array.length; i++)
         {
             int b256 = array[i] & 255;
-            iVal += b256 << ((2 - i) * 8);
+            iVal |= b256 << ((2 - i) * 8);
         }
 
         array = new byte[array.length + 1];
@@ -63,7 +63,7 @@ public class B64Converter
         for (int i = 0; i < array.length; i++)
         {
             int b64 = array[i] & 63;
-            iVal += b64 << ((3 - i) * 6);
+            iVal |= b64 << ((3 - i) * 6);
         }
 
         array = new byte[array.length - 1];
