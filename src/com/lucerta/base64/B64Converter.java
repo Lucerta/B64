@@ -42,15 +42,16 @@ public class B64Converter
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
         {
-            int b = array[i] & 255;
-            iVal += b << ((2 - i) * 8);
+            int b256 = array[i] & 255;
+            iVal += b256 << ((2 - i) * 8);
         }
 
         array = new byte[array.length + 1];
 
         for (int i = 0; i < array.length; i++)
         {
-            array[i] = (byte)((iVal >> ((3 - i) * 6)) & 63);
+            int b64 = (iVal >> ((3 - i) * 6)) & 63;
+			array[i] = (byte)b64;
         }
 
         return array;
@@ -61,15 +62,16 @@ public class B64Converter
         int iVal = 0;
         for (int i = 0; i < array.length; i++)
         {
-            int b = array[i] & 63;
-            iVal += b << ((3 - i) * 6);
+            int b64 = array[i] & 63;
+            iVal += b64 << ((3 - i) * 6);
         }
 
         array = new byte[array.length - 1];
 
         for (int i = 0; i < array.length; i++)
         {
-            array[i] = (byte)((iVal >> ((2 - i) * 8)) & 255);
+			int b256 = (iVal >> ((2 - i) * 8)) & 255;
+			array[i] = (byte)b256;
         }
 
         return array;
