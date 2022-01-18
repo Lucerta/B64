@@ -51,7 +51,7 @@ public class B64Converter
         for (int i = 0; i < array.length; i++)
         {
             int b64 = (iVal >> ((3 - i) * 6)) & 63;
-			array[i] = (byte)b64;
+            array[i] = (byte)b64;
         }
 
         return array;
@@ -70,8 +70,8 @@ public class B64Converter
 
         for (int i = 0; i < array.length; i++)
         {
-			int b256 = (iVal >> ((2 - i) * 8)) & 255;
-			array[i] = (byte)b256;
+            int b256 = (iVal >> ((2 - i) * 8)) & 255;
+            array[i] = (byte)b256;
         }
 
         return array;
