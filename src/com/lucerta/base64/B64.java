@@ -20,7 +20,9 @@ public class B64
 
     public static String encodeToString(String text, boolean urlSafe)
     {
-        return encodeToString(text, StandardCharsets.UTF_8, urlSafe);
+        byte[] data = text.getBytes(StandardCharsets.UTF_8);
+        data = B64Converter.encode(data, urlSafe);
+        return new String(data, StandardCharsets.US_ASCII);
     }
 
     public static byte[] encodeToBytes(byte[] data, boolean urlSafe)
@@ -36,7 +38,8 @@ public class B64
 
     public static byte[] encodeToBytes(String text, boolean urlSafe)
     {
-        return encodeToBytes(text, StandardCharsets.UTF_8, urlSafe);
+        byte[] data = text.getBytes(StandardCharsets.UTF_8);
+        return B64Converter.encode(data, urlSafe);
     }
 
     public static byte[] decodeToBytes(String text)
@@ -59,7 +62,9 @@ public class B64
 
     public static String decodeToString(String text)
     {
-        return decodeToString(text, StandardCharsets.UTF_8);
+        byte[] data = text.getBytes(StandardCharsets.US_ASCII);
+        data = B64Converter.decode(data);
+        return new String(data, StandardCharsets.UTF_8);
     }
 
     public static String decodeToString(byte[] data, Charset outputCharset)
@@ -70,7 +75,8 @@ public class B64
 
     public static String decodeToString(byte[] data)
     {
-        return decodeToString(data, StandardCharsets.UTF_8);
+        data = B64Converter.decode(data);
+        return new String(data, StandardCharsets.UTF_8);
     }
 
 }
