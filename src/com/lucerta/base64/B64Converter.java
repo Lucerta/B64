@@ -100,16 +100,16 @@ public class B64Converter
         boolean ending = false;
         for (byte b : data)
         {
-            char c = (char)b;
-            if (c == '=')
+            char ch = (char)b;
+            if (ch == '=')
             {
                 ending = true;
                 continue;
             }
-            int index = REVERSE_LOOKUP[c];
+            int index = REVERSE_LOOKUP[ch];
             if (index == -2) continue; // b = 9 (tab), 10 (lf), 13 (cr) or 32 (spc)
             if (ending || index == -1)
-                throw new IllegalArgumentException("Invalid char val=" + (int)c);
+                throw new IllegalArgumentException("Invalid char val=" + (int)ch);
             buffer.write((byte)index);
         }
         return buffer.toByteArray();
