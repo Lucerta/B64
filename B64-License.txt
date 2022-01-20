@@ -1,4 +1,4 @@
-B64 : Base64 Encoder / Decoder
+B64 : Base 64 Encoder / Decoder
 
 Copyright 2022 Lucerta LLC.
 
